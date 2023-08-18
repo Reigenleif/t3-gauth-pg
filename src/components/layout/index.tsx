@@ -3,11 +3,12 @@ import { Navbar } from "./Navbar";
 
 interface LayoutProps {
     children: React.ReactNode
+    type?: 'signin' | 'signup'
 }
 
-export default function Layout({children} : LayoutProps) {
+export default function Layout({children,type} : LayoutProps) {
     return <Flex flexDir="column" w="100vw" overflowX="hidden">
-        <Navbar/>
+        <Navbar type={type}/>
         {children}
     </Flex>
 }

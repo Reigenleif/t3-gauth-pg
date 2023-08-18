@@ -11,6 +11,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import { TRPCError } from "@trpc/server";
+import { UserRole } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -23,7 +24,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       // ...other properties
-      // role: UserRole;
+      role: UserRole;
     };
   }
 
@@ -39,14 +40,33 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    maxAge: env.SESSION_MAXAGE,
+    secret: env.JWT_SECRET,
+  },
+
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, token, trigger }) => {
+      const payload = {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          role: token.role,
+        },
+      };
+
+      return payload;
+    },
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -97,8 +117,6 @@ export const authOptions: NextAuthOptions = {
             code: "BAD_REQUEST",
             message: "Wrong password",
           });
-
-        console.log(user);
         return user;
       },
     }),
@@ -109,7 +127,9 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/signin",
+    error: "/404",
   },
+  secret: env.NEXTAUTH_SECRET,
 };
 
 /**

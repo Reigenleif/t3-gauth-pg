@@ -1,10 +1,21 @@
 import { api } from "~/utils/api";
-import { useState } from "react";
-import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import { FormEvent, FormEventHandler, useState } from "react";
+import {
+  AbsoluteCenter,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormControl,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { useToaster } from "~/utils/hooks/useToaster";
 import Layout from "./layout";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { getCsrfToken, signIn, useSession } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { PasswordInput } from "~/utils/elements/PasswordInput";
 
 interface SignInProps {
   csrfToken: string;
@@ -12,6 +23,9 @@ interface SignInProps {
 
 export const SignIn = ({ csrfToken }: SignInProps) => {
   const toaster = useToaster();
+  const router = useRouter();
+
+  const {data: session} = useSession()
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -28,16 +42,21 @@ export const SignIn = ({ csrfToken }: SignInProps) => {
 
   const credentialSignIn = (email: string, password: string) => {
     toaster(() =>
-      signIn("credentials", { email, password, redirect: false, csrfToken })
+      signIn("credentials", { email, password, redirect: true, csrfToken })
     );
   };
 
-  const OnSignIn = () => {
+  const googleSignIn = () => {
+    toaster(() => signIn("google", { redirect: true, csrfToken }));
+  };
+
+  const onSignIn = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     credentialSignIn(emailInput, passwordInput);
   };
 
   return (
-    <Layout>
+    <Layout type="signin">
       <Flex justifyContent="center">
         <Flex
           flexDirection="column"
@@ -47,21 +66,54 @@ export const SignIn = ({ csrfToken }: SignInProps) => {
           w="min(30em,95%)"
         >
           <Text textAlign="center">Sign In</Text>
-          <Input
-            mt="1em"
-            w="100%"
-            value={emailInput}
-            onChange={emailChangeHandler}
-          />
-          <Input
-            mt="1em"
-            w="100%"
-            value={passwordInput}
-            onChange={passwordChangeHandler}
-          />
-          <Button onClick={OnSignIn} w="50%" m="auto" mt="1em">
-            Sign In
-          </Button>
+          <form onSubmit={onSignIn}>
+            <FormControl>
+              <Input
+                mt="1em"
+                w="100%"
+                value={emailInput}
+                onChange={emailChangeHandler}
+                placeholder="Email"
+                id="EmailInput"
+              />
+
+              <PasswordInput
+                mt="1em"
+                w="100%"
+                value={passwordInput}
+                type="password"
+                onChange={passwordChangeHandler}
+                placeholder="Password"
+              />
+
+              <Flex w="100%" flexDir="column" mt="1em">
+                <Button type="submit" w="50%" m="auto">
+                  Sign In with Email
+                </Button>
+                <Button m="auto" mt="1em" w="50%" onClick={googleSignIn}>
+                  Sign In with Google
+                </Button>
+              </Flex>
+
+              <Flex pos="relative" p="10" alignItems="center">
+                <Divider color="black" />
+                <AbsoluteCenter
+                  bg="white"
+                  fontSize="xl"
+                  w="2em"
+                  textAlign="center"
+                >
+                  or
+                </AbsoluteCenter>
+              </Flex>
+              <Flex w="100%">
+                <Button onClick={() => router.push("/signup")} w="50%" m="auto">
+                  Sign Up
+                </Button>
+              </Flex>
+            </FormControl>
+          </form>
+          {session ? <Text>Logged in as {session.user.email}</Text> : <Text>Not logged in</Text>}
         </Flex>
       </Flex>
     </Layout>

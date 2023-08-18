@@ -1,14 +1,17 @@
 import { api } from "~/utils/api";
 import { useState } from "react";
-import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, Input, Text, useToast } from "@chakra-ui/react";
 import { useToaster } from "~/utils/hooks/useToaster";
 import Layout from "./layout";
+import { PasswordInput } from "~/utils/elements/PasswordInput";
 
 export const SignUp = () => {
+  const toast = useToast();
   const toaster = useToaster();
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
 
   const emailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailInput(e.target.value);
@@ -18,6 +21,12 @@ export const SignUp = () => {
     setPasswordInput(e.target.value);
   };
 
+  const confirmPasswordChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setConfirmPasswordInput(e.target.value);
+  };
+
   const createUserMutation = api.user.createUser.useMutation();
 
   const credentialSignUp = (email: string, password: string) => {
@@ -25,6 +34,55 @@ export const SignUp = () => {
   };
 
   const credentialButtonClickHandler = () => {
+    if (emailInput === "") {
+      toast({
+        title: "Email cannot be empty",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (passwordInput === "") {
+      toast({
+        title: "Password cannot be empty",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!emailInput.includes("@")) {
+      toast({
+        title: "Please enter a valid email address",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (passwordInput.length < 8) {
+      toast({
+        title: "Password must be at least 8 characters long",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (passwordInput !== confirmPasswordInput) {
+      toast({
+        title: "Passwords do not match",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     credentialSignUp(emailInput, passwordInput);
   };
 
@@ -44,13 +102,23 @@ export const SignUp = () => {
             w="100%"
             value={emailInput}
             onChange={emailChangeHandler}
+            placeholder="Email"
           />
-          <Input
+          <PasswordInput
             mt="1em"
             w="100%"
             value={passwordInput}
             onChange={passwordChangeHandler}
+            placeholder="Password"
           />
+          <PasswordInput
+            mt="1em"
+            w="100%"
+            value={confirmPasswordInput}
+            onChange={confirmPasswordChangeHandler}
+            placeholder="Confirm Password"
+          />
+
           <Button
             onClick={credentialButtonClickHandler}
             w="50%"
