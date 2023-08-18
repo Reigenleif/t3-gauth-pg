@@ -11,7 +11,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useToaster } from "~/utils/hooks/useToaster";
-import Layout from "./layout";
 import { getCsrfToken, signIn, useSession } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
@@ -56,7 +55,6 @@ export const SignIn = ({ csrfToken }: SignInProps) => {
   };
 
   return (
-    <Layout type="signin">
       <Flex justifyContent="center">
         <Flex
           flexDirection="column"
@@ -116,6 +114,5 @@ export const SignIn = ({ csrfToken }: SignInProps) => {
           {session ? <Text>Logged in as {session.user.email}</Text> : <Text>Not logged in</Text>}
         </Flex>
       </Flex>
-    </Layout>
   );
 };

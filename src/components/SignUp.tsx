@@ -2,7 +2,6 @@ import { api } from "~/utils/api";
 import { useState } from "react";
 import { Button, Flex, Input, Text, useToast } from "@chakra-ui/react";
 import { useToaster } from "~/utils/hooks/useToaster";
-import Layout from "./layout";
 import { PasswordInput } from "~/utils/elements/PasswordInput";
 
 export const SignUp = () => {
@@ -87,7 +86,6 @@ export const SignUp = () => {
   };
 
   return (
-    <Layout>
       <Flex justifyContent="center">
         <Flex
           flexDirection="column"
@@ -129,6 +127,5 @@ export const SignUp = () => {
           </Button>
         </Flex>
       </Flex>
-    </Layout>
   );
 };
