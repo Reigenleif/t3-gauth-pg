@@ -4,7 +4,11 @@ import { Button, Flex, Input, Text, useToast } from "@chakra-ui/react";
 import { useToaster } from "~/utils/hooks/useToaster";
 import { PasswordInput } from "~/utils/elements/PasswordInput";
 
-export const SignUp = () => {
+interface SignUpProps {
+  csrfToken: string
+}
+
+export const SignUp = ({csrfToken}: SignUpProps) => {
   const toast = useToast();
   const toaster = useToaster();
 
@@ -29,7 +33,9 @@ export const SignUp = () => {
   const createUserMutation = api.user.createUser.useMutation();
 
   const credentialSignUp = (email: string, password: string) => {
-    toaster(() => createUserMutation.mutateAsync({ email, password }));
+
+    // TODO: Kasih CSRF Validation & reCAPTCHA
+    toaster(createUserMutation.mutateAsync({ email, password }));
   };
 
   const credentialButtonClickHandler = () => {

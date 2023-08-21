@@ -13,6 +13,7 @@ export const userRouter = createTRPCRouter({
     password: z.string().min(8),
   })).mutation(async ({input}) => {
     
+    // TODO: Kasih reCHAPTCHA
     const {email, password} = input;
     if (!email) throw new Error("Email is required");
     if (!password) throw new Error("Password is required");

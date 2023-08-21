@@ -3,6 +3,7 @@ import { getCsrfToken, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SignIn } from "~/components/SignIn";
+import { PublicLayout } from "~/components/layout/PublicLayout";
 
 export default function Signin({
   csrfToken,
@@ -14,7 +15,11 @@ export default function Signin({
     router.push("/");
   }
 
-  return <SignIn csrfToken={csrfToken || ""} />;
+  return (
+    <PublicLayout>
+      <SignIn csrfToken={csrfToken || ""} />
+    </PublicLayout>
+  );
 }
 
 export const getServerSideProps = async (

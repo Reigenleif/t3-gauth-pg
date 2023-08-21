@@ -27,6 +27,20 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     SESSION_COOKIE_DOMAIN: z.string(),
     SESSION_MAXAGE: z.number().int().positive(),
+    GOOGLE_APPLICATION_CREDENTIALS: z.string().min(1),
+    BUCKET_NAME: z.string().min(1),
+    URL_EXPIRATION_TIME: z.preprocess(
+      // If URL_EXPIRATION_TIME is not set, set it to 1 hour
+      (str) => (str ? +str : 60 * 60 * 1000),
+      // URL_EXPIRATION_TIME must be a positive integer
+      z.number().int().positive().min(1)
+    ),
+    BUCKET_CORS_EXPIRATION_TIME: z.preprocess(
+      // If BUCKET_CORS_EXPIRATION_TIME is not set, set it to 1 hour
+      (str) => (str ? +str : 60 * 60),
+      // BUCKET_CORS_EXPIRATION_TIME must be a positive integer
+      z.number().int().positive().min(1)
+    )
   },
 
   /**
@@ -51,7 +65,11 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     SESSION_COOKIE_DOMAIN: process.env.SESSION_COOKIE_DOMAIN || "localhost",
-    SESSION_MAXAGE: parseInt(process.env.SESSION_MAXAGE || "7200")
+    SESSION_MAXAGE: parseInt(process.env.SESSION_MAXAGE || "7200"),
+    GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    BUCKET_NAME: process.env.BUCKET_NAME,
+    URL_EXPIRATION_TIME: process.env.URL_EXPIRATION_TIME,
+    BUCKET_CORS_EXPIRATION_TIME: process.env.BUCKET_CORS_EXPIRATION_TIME
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

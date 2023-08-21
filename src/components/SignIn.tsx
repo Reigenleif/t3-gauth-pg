@@ -40,13 +40,12 @@ export const SignIn = ({ csrfToken }: SignInProps) => {
   const createUserMutation = api.user.createUser.useMutation();
 
   const credentialSignIn = (email: string, password: string) => {
-    toaster(() =>
-      signIn("credentials", { email, password, redirect: true, csrfToken })
+    toaster(signIn("credentials", { email, password, redirect: true, csrfToken })
     );
   };
 
   const googleSignIn = () => {
-    toaster(() => signIn("google", { redirect: true, csrfToken }));
+    toaster(signIn("google", { redirect: true, csrfToken }));
   };
 
   const onSignIn = (e: FormEvent<HTMLFormElement>) => {

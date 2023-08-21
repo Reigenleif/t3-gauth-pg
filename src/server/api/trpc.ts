@@ -7,6 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
+import { UserRole } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
@@ -119,6 +120,38 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+const isParticipant = t.middleware(({ ctx, next}) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  if (ctx.session?.user?.role !== UserRole.PARTICIPANT) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  })
+})
+
+const isAdmin = t.middleware(({ ctx, next}) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  if (ctx.session?.user?.role !== UserRole.ADMIN) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  })
+})
+
 /**
  * Protected (authenticated) procedure
  *
@@ -128,3 +161,5 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const participantProcedure = t.procedure.use(enforceUserIsAuthed).use(isParticipant);
+export const adminProcedure = t.procedure.use(enforceUserIsAuthed).use(isAdmin);
