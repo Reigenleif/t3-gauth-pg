@@ -20,9 +20,12 @@ type ProfileOutput = RouterOutputs["profile"]["getProfile"];
 
 interface EditPictureModalProps {
   profile: ProfileOutput;
+  imageUrl?: string;
+  uploadProfileImage: (picInput: File | undefined) => Promise<void>;
+  isUploading: boolean;
 }
 
-export const EditPictureModal = ({ profile }: EditPictureModalProps) => {
+export const EditPictureModal = ({ profile, imageUrl, uploadProfileImage, isUploading  }: EditPictureModalProps) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   const [picInput, setPicInput] = useState<File>();
@@ -31,20 +34,15 @@ export const EditPictureModal = ({ profile }: EditPictureModalProps) => {
     if (!e.target.files || !e.target.files[0]) return;
     setPicInput(e.target.files[0]);
   };
-
-  const {uploader, isUploading} = useUploader()
-
-  const generateUrlForUpload = api.storage.generateURLForUpload.useMutation();
-
-  const uploadProfileImage = async () => {
-    if (!picInput) return;
-    uploader(`${profile.id}.png`, FolderEnum.PROFILE, AllowableFileTypeEnum.JPEG, picInput)
-  };
+  
+  const handleUpload = () => {
+    uploadProfileImage(picInput).then(() => onClose())
+  }
 
   return (
     <>
-      <Button w="8em" h="8em" borderRadius="4em" mt="1em" onClick={onOpen}>
-        <MdPerson size="8em" />
+      <Button w="8em" h="8em" borderRadius="4em" mt="1em" onClick={onOpen} overflow="hidden">
+        {imageUrl ? <Image src={imageUrl} w="8em"/> : <MdPerson size="8em" />}
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -69,7 +67,7 @@ export const EditPictureModal = ({ profile }: EditPictureModalProps) => {
           <Input type="file" onChange={handleFileChange} />
           {isUploading ? <p>Uploading...</p> : <></>}
           <ModalFooter>
-            <Button onClick={uploadProfileImage}>Save</Button>
+            <Button onClick={handleUpload}>Save</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

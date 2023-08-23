@@ -5,7 +5,6 @@ import { env } from "~/env.mjs";
 const instantiateBucket = () => {
   const storage = new Storage();
   const bucket = storage.bucket(env.BUCKET_NAME);
-  console.log("BUCKET_INSTANTIATED");
   return bucket;
 };
 

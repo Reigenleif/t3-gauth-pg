@@ -30,8 +30,8 @@ export const env = createEnv({
     GOOGLE_APPLICATION_CREDENTIALS: z.string().min(1),
     BUCKET_NAME: z.string().min(1),
     URL_EXPIRATION_TIME: z.preprocess(
-      // If URL_EXPIRATION_TIME is not set, set it to 1 hour
-      (str) => (str ? +str : 60 * 60 * 1000),
+      // If URL_EXPIRATION_TIME is not set, set it to 7 day
+      (str) => (str ? +str : 60 * 60 * 24 * 7),
       // URL_EXPIRATION_TIME must be a positive integer
       z.number().int().positive().min(1)
     ),

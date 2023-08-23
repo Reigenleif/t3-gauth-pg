@@ -61,6 +61,7 @@ export function withSession<T extends boolean>({
     }
 
     session.user.role = session.user.role || null
+    session.user.image = session.user.image || null
 
     return { props: { session } };
   };

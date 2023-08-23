@@ -21,15 +21,6 @@ const theme = extendTheme({
           w: '2',
           h: '1.5'
         },
-        '&::-webkit-scrollbar-track': {
-          backgroundColor: 'black',
-          boxShadow: 'inset 0 0 7px white'
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'yellow.1',
-          boxShadow: 'inset 0 0 2px black',
-          borderRadius: '4'
-        }
       }
     }
   },

@@ -60,9 +60,9 @@ export const storageRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      const fileUUID = uuidv4();
+      // const fileUUID = uuidv4(); // Uncomment this if you want to use UUID for filename
       const sanitizedFileName = sanitize(input.filename);
-      const sanitizedFilename = `${fileUUID}-${sanitizedFileName}`;
+      const sanitizedFilename = `${sanitizedFileName}`; // Put UUID here if its enabled
       
 
       await bucket.setCorsConfiguration([
@@ -73,8 +73,6 @@ export const storageRouter = createTRPCRouter({
           responseHeader: ["Content-Type"]
         }
       ]);
-
-      console.log(sanitizedFileName)
 
       const ref = bucket.file(`${input.folder}/${sanitizedFilename}`);
 
@@ -87,7 +85,8 @@ export const storageRouter = createTRPCRouter({
 
       return {
         url,
-        sanitizedFilename
+        sanitizedFilename,
+        urlExpires: Date.now() + env.URL_EXPIRATION_TIME
       };
     }),
 

@@ -12,30 +12,58 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { MdClose, MdEdit, MdPerson } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RouterInputs, api } from "~/utils/api";
 import { useToaster } from "~/utils/hooks/useToaster";
 import { EditProfileModal, UpdateProfileDataType } from "./EditProfileModal";
 import { EditPictureModal } from "./EditPictureModal";
+import { useDownloader } from "~/utils/hooks/useDownloader";
+import { AllowableFileTypeEnum, FolderEnum, downloadFile } from "~/utils/file";
+import { useUploader } from "~/utils/hooks/useUploader";
 
 export const Profile = () => {
   const toaster = useToaster();
   const { data: session } = useSession();
+  const { downloader } = useDownloader();
+  const { uploader, isUploading } = useUploader();
 
   const profileQuery = api.profile.getProfile.useQuery();
   const profileMutation = api.profile.updateProfile.useMutation();
 
-  const profile = profileQuery.data 
+  const profile = profileQuery.data;
 
-  if (!profile) return <></>
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
 
-  const updateProfile = (data: UpdateProfileDataType, fn: () => void) => {
+  useEffect(() => {
+    if (!profile) return;
+    downloader({
+      folder: FolderEnum.PROFILE,
+      filename: `${profile.id}.png`,
+    }).then(({ url }) => setImageUrl(url));
+  }, [profile]);
+
+  console.log(imageUrl);
+
+  if (!profile) return <></>;
+
+  const updateProfile = async (data: UpdateProfileDataType, fn: () => void) => {
     toaster(profileMutation.mutateAsync(data), {
       thenFn: () => {
         fn();
         profileQuery.refetch();
       },
     });
+  };
+
+  const uploadProfileImage = async (picInput: File | undefined) => {
+    if (!picInput) return;
+    uploader(
+      `${profile.id}.png`,
+      FolderEnum.PROFILE,
+      AllowableFileTypeEnum.JPEG,
+      picInput
+    );
+    profileQuery.refetch();
   };
 
   return (
@@ -48,7 +76,12 @@ export const Profile = () => {
       p="1em"
       m="auto"
     >
-      <EditPictureModal profile={profile}/>
+      <EditPictureModal
+        profile={profile}
+        imageUrl={imageUrl}
+        uploadProfileImage={uploadProfileImage}
+        isUploading={isUploading}
+      />
       <TableContainer>
         <Table>
           <ProfileInfoRow placeholder="Name" value={profile.name} />
@@ -73,7 +106,7 @@ interface ProfileInfoRowProps {
   value: any;
 }
 
-const ProfileInfoRow = ({placeholder, value} : ProfileInfoRowProps) => {
+const ProfileInfoRow = ({ placeholder, value }: ProfileInfoRowProps) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
