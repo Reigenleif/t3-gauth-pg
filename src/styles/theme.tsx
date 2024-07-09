@@ -4,6 +4,7 @@ import { Button } from './component/button';
 import { Input } from './component/input';
 import { Table } from './component/table';
 import { Textarea } from './component/textarea';
+import { breakpoints } from './breakpoints';
 
 const theme = extendTheme({
   fonts: {
@@ -29,7 +30,8 @@ const theme = extendTheme({
     Input,
     Table,
     Textarea
-  }
+  },
+  breakpoints: breakpoints
 });
 
 export default theme;
