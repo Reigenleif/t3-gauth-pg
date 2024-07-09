@@ -8,7 +8,9 @@ export enum FolderEnum {
 export enum AllowableFileTypeEnum {
   PDF = "application/pdf",
   PNG = "image/png",
-  JPEG = "image/jpeg"
+  JPEG = "image/jpeg",
+  ZIP = "application/zip",
+  PICTURES = "image/*"
 }
 
 export const uploadFile = async (
@@ -32,11 +34,14 @@ export const downloadFile = async (
   onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
 ) => {
   const axiosInstance = axios.create();
-
+ 
   const response = await axiosInstance.get<Blob>(url, {
     responseType: "blob",
     onDownloadProgress
   });
+
+  console.log(response)
+
 
   return response.data;
 };

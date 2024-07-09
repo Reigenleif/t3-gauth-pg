@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { BaseLayout, ProtectedLayoutProps } from "./base-components/BaseLayout";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const AuthorizedRoleLayout = ({
   children,
@@ -8,16 +8,14 @@ export const AuthorizedRoleLayout = ({
   session,
 }: ProtectedLayoutProps) => {
   const router = useRouter();
-
-  useEffect(() => {
-    authCheck();
-  }, []);
-
-  const authCheck = () => {
+  const authCheck = useCallback(() => {
     if (!session) {
       void router.push("/");
     }
-  };
+  }, [session, router]);
+  useEffect(() => {
+    authCheck();
+  }, [authCheck]);
 
-  return <BaseLayout>{ children }</BaseLayout>;
+  return <BaseLayout>{children}</BaseLayout>;
 };
