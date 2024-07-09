@@ -1,6 +1,10 @@
-# Create T3 App
+# Agile Webapp Repository Template
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is a repository of a web application template that focused on agile principles
+
+# T3 - Google Auth - PostgreSQL
+
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`. Simple authentication with email-password combination and google auth is also included. The PostgresSQL is used as database with prisma as an ORM. ChakraUI included as an agile styling library.
 
 ## What's next? How do I make an app with this?
 
@@ -13,8 +17,10 @@ If you are not familiar with the different technologies used in this project, pl
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
+- [ChakraUI](https://v2.chakra-ui.com/)
+- [GCP](https://cloud.google.com/)
 
-## Learn More
+## Learn More About the T3
 
 To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
