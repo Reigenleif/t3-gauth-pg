@@ -1055,10 +1055,10 @@
     teeny-request "^9.0.0"
     uuid "^8.0.0"
 
-"@hookform/resolvers@^3.1.1":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.2.0.tgz#0f48f57d464a216fa4a2d76b0f1317b91f91e99b"
-  integrity sha512-skXQHhLxq0Sz2xDwCyv5dygBCtXJe1GmWwxDzfdtl0X6agD6qcyTG8HrZWkjJoy8AkiLARqYvSYJ8z7+Nwmi7w==
+"@hookform/resolvers@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
+  integrity sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==
 
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
@@ -3859,10 +3859,15 @@ react-focus-lock@^2.9.4:
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
 
-react-icons@^4.10.1:
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
-  integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
+react-hook-form@^7.52.1:
+  version "7.52.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.52.1.tgz#ec2c96437b977f8b89ae2d541a70736c66284852"
+  integrity sha512-uNKIhaoICJ5KQALYZ4TOaOLElyM+xipord+Ha3crEFhTntdLvWZqVY49Wqd/0GiVCA/f9NjemLeiNPjG7Hpurg==
+
+react-icons@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.2.1.tgz#28c2040917b2a2eda639b0f797bff1888e018e4a"
+  integrity sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
