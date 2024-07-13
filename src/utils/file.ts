@@ -1,9 +1,15 @@
 import axios, { type AxiosProgressEvent } from "axios";
+import { z } from "zod";
 
 export enum FolderEnum {
   PROFILE = "profile-picture",
   DOCUMENT = "document",
 }
+
+export const zodFolderEnum = z.union([
+  z.literal(FolderEnum.PROFILE),
+  z.literal(FolderEnum.DOCUMENT),
+])
 
 export enum AllowableFileTypeEnum {
   PDF = "application/pdf",
@@ -12,6 +18,14 @@ export enum AllowableFileTypeEnum {
   ZIP = "application/zip",
   PICTURES = "image/*"
 }
+
+export const zodAllowableFileTypeEnum = z.union([
+  z.literal(AllowableFileTypeEnum.PDF),
+  z.literal(AllowableFileTypeEnum.PNG),
+  z.literal(AllowableFileTypeEnum.JPEG),
+  z.literal(AllowableFileTypeEnum.ZIP),
+  z.literal(AllowableFileTypeEnum.PICTURES)
+])
 
 export const uploadFile = async (
   url: string,
