@@ -73,7 +73,10 @@ export const storageRouter = createTRPCRouter({
         contentType: input.contentType
       });
 
+      const publicUrl = `https://storage.googleapis.com/${env.BUCKET_NAME}/${input.folder}/${sanitizedFilename}`;
+
       return {
+        publicUrl,
         url,
         sanitizedFilename,
         urlExpires: Date.now() + env.URL_EXPIRATION_TIME
